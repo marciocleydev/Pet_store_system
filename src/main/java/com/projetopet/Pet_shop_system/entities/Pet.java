@@ -6,7 +6,9 @@ import jakarta.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "pet")
@@ -27,6 +29,9 @@ public class Pet implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_client")
     private Client client;
+    @JsonIgnore
+    @ManyToMany(mappedBy = "pets")
+    private Set<ServiceRequest>servRequest = new HashSet<>();
     public Pet(){
     }
 
@@ -84,6 +89,14 @@ public class Pet implements Serializable {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public Set<ServiceRequest> getServRequest() {
+        return servRequest;
+    }
+
+    public void addServRequest(ServiceRequest servReques) {
+        this.servRequest.add(servReques);
     }
 
     @Override

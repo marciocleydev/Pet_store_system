@@ -18,12 +18,10 @@ public class User implements Serializable {
     private String login;
     private String passWord;
     @JsonIgnore
-    @OneToOne
-    @JoinColumn(name = "id_client")
+    @OneToOne(mappedBy = "user")
     private Client client;
     @JsonIgnore
-    @OneToOne
-    @JoinColumn(name = "id_employee")
+    @OneToOne(mappedBy = "user")
     private Employee employee;
     public User(){
     }

@@ -1,5 +1,6 @@
 package com.projetopet.Pet_shop_system.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -22,12 +23,17 @@ public class Client implements Serializable {
     private LocalDate birthDate;
     private String email;
     private String phone;
-    @OneToOne(mappedBy = "client",cascade = CascadeType.ALL)
+    @OneToOne
+    @JoinColumn(name = "id_user")
     private User user;
-    @OneToOne(mappedBy = "client",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne
+    @JoinColumn(name = "id_address")
     private Address address;
     @OneToMany(mappedBy = "client",cascade = CascadeType.PERSIST)
     private Set<Pet> pets = new HashSet<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "client")
+    private Set<ServiceRequest> servRequests = new HashSet<>();
     public Client(){
     }
 
@@ -38,7 +44,7 @@ public class Client implements Serializable {
         this.birthDate = birthDate;
         this.email = email;
         this.phone = phone;
-        addAdress(address);
+        this.address = address;
         addPet(pet);
     }
 
@@ -93,29 +99,23 @@ public class Client implements Serializable {
         return user;
     }
     public void addUser(User user){
-        user.setClient(this);
         this.user = user;
-    }
-    public void removeUser(User user){
-        this.user = null;
-        user.setClient(null);
     }
 
     public Address getAddress() {
         return address;
     }
 
-    public void addAdress(Address address){
-        address.setClient(this);
-        this.address = address;
-    }
-    public void removeAdress(Address address){
-        this.address = null;
-        address.setClient(null);
-    }
-
     public Set<Pet> getPets() {
         return pets;
+    }
+    public Pet getOnePet(String name){
+        for (Pet pet: pets){
+            if (pet.getName().equalsIgnoreCase(name)){
+                return pet;
+            }
+        }
+        throw new IllegalArgumentException("pet doesn't existe! ");
     }
 
     public void addPet(Pet pet){
@@ -125,6 +125,14 @@ public class Client implements Serializable {
     public void removePet(Pet pet){
         pet.setClient(null);
         this.pets.remove(pet);
+    }
+
+    public Set<ServiceRequest> getServRequests() {
+        return servRequests;
+    }
+
+    public void addServRequests(ServiceRequest servRequest) {
+        this.servRequests.add(servRequest);
     }
 
     @Override

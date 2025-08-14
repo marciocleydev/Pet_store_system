@@ -23,12 +23,10 @@ public class Address implements Serializable {
     private String county;
     private  String referencePoint;
     @JsonIgnore
-    @OneToOne
-    @JoinColumn(name = "id_client")
+    @OneToOne(mappedBy = "address")
     private Client client;
     @JsonIgnore
-    @OneToOne
-    @JoinColumn(name = "id_employee")
+    @OneToOne(mappedBy = "address")
     private Employee employee;
     public Address(){
     }

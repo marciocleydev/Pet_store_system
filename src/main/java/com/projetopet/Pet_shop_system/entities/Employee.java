@@ -6,7 +6,10 @@ import jakarta.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+
 @Entity
 @Table(name = "employee")
 public class Employee implements Serializable {
@@ -20,10 +23,15 @@ public class Employee implements Serializable {
     private LocalDate birthDate;
     private String email;
     private String phone;
-    @OneToOne(mappedBy = "employee",cascade = CascadeType.ALL)
+    @OneToOne
+    @JoinColumn(name = "id_address")
     private Address address;
-    @OneToOne(mappedBy = "employee",cascade = CascadeType.ALL)
+    @OneToOne
+    @JoinColumn(name = "id_user")
     private User user;
+    @ManyToOne
+    @JoinColumn(name = "id_service")
+    private Service service;
     @Enumerated(EnumType.STRING)
     private Cargo cargo;
     public Employee(){
@@ -113,12 +121,15 @@ public class Employee implements Serializable {
     }
 
     public void addUser(User user){
-        user.setEmployee(this);
         this.user = user;
     }
-    public void removeUser(User user){
-        this.user = null;
-        user.setEmployee(null);
+
+    public Service getService() {
+        return service;
+    }
+
+    public void setService(Service service) {
+        this.service = service;
     }
 
     public Cargo getCargo() {
