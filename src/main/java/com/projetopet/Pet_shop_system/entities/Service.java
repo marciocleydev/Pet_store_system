@@ -1,6 +1,7 @@
 package com.projetopet.Pet_shop_system.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.projetopet.Pet_shop_system.entities.enums.ServiceItem;
 import com.projetopet.Pet_shop_system.entities.enums.ServiceType;
 import jakarta.persistence.*;
 
@@ -26,6 +27,8 @@ public class Service implements Serializable {
     private Set<Employee> employees = new HashSet<>();
     @Enumerated(EnumType.STRING)
     private ServiceType type;
+    @OneToMany(mappedBy = "id.service")
+    private Set<ServiceItem> serviceItems = new HashSet<>();
     public Service(){
     }
 
@@ -83,6 +86,14 @@ public class Service implements Serializable {
 
     public void setType(ServiceType type) {
         this.type = type;
+    }
+
+    public Set<ServiceItem> getServiceItems() {
+        return serviceItems;
+    }
+
+    public void addServiceItem(ServiceItem serviceItem) {
+        this.serviceItems.add(serviceItem);
     }
 
     @Override

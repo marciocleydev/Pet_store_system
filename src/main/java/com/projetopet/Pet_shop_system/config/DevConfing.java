@@ -32,6 +32,8 @@ public class DevConfing implements CommandLineRunner {
     ServiceRepository serviceRepository;
     @Autowired
     ServRequestRepository servRequestRepository;
+    @Autowired
+    ServiceItemRepository serviceItemRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -102,7 +104,12 @@ public class DevConfing implements CommandLineRunner {
 
         Payment payment1 = new Payment(null,200.0, 10, PaymentType.CREDIT_CARD, PaymentStatus.PENDING);
 
-        ServiceRequest servRequest1 = new ServiceRequest(null, LocalDateTime.now(),"Primeiro atendimento", StatusServiceRequest.SCHEDULED,client1,client1.getOnePet("rex"),payment1);
+        ServiceRequest servRequest1 = new ServiceRequest(null, LocalDateTime.now(),"Primeiro atendimento", StatusServiceRequest.SCHEDULED,client1,payment1);
+        servRequest1.addPet(client1.getOnePet("rex"));
+        servRequest1.addEmployee(employee3);
         servRequestRepository.save(servRequest1);
+
+        ServiceItem serviceItem1 = new ServiceItem(service1,servRequest1,servRequest1.getTotalValue());
+        serviceItemRepository.save(serviceItem1);
     }
 }

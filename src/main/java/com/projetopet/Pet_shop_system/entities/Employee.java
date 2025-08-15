@@ -1,5 +1,6 @@
 package com.projetopet.Pet_shop_system.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.projetopet.Pet_shop_system.entities.enums.Cargo;
 import jakarta.persistence.*;
 
@@ -34,6 +35,9 @@ public class Employee implements Serializable {
     private Service service;
     @Enumerated(EnumType.STRING)
     private Cargo cargo;
+    @JsonIgnore
+    @ManyToMany(mappedBy = "employees")
+    private Set<ServiceRequest> requests = new HashSet<>();
     public Employee(){
     }
 
@@ -138,6 +142,14 @@ public class Employee implements Serializable {
 
     public void setCargo(Cargo cargo) {
         this.cargo = cargo;
+    }
+
+    public Set<ServiceRequest> getRequests() {
+        return requests;
+    }
+
+    public void addRequests(ServiceRequest request) {
+        this.requests.add(request);
     }
 
     @Override

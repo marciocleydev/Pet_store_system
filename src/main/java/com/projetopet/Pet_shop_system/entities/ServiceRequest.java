@@ -1,5 +1,6 @@
 package com.projetopet.Pet_shop_system.entities;
 
+import com.projetopet.Pet_shop_system.entities.enums.ServiceItem;
 import com.projetopet.Pet_shop_system.entities.enums.StatusServiceRequest;
 import jakarta.persistence.*;
 
@@ -25,21 +26,26 @@ public class ServiceRequest implements Serializable {
     @JoinColumn(name = "id_client")
     private Client client;
     @ManyToMany
+    @JoinTable(name = "employee_servrequest",joinColumns = @JoinColumn(name = "id_servrequest"),
+            inverseJoinColumns = @JoinColumn(name = "id_employee"))
+    private Set<Employee> employees = new HashSet<>();
+    @ManyToMany
     @JoinTable(name = "pet_servrequest",joinColumns = @JoinColumn(name = "id_servrequest"),
             inverseJoinColumns = @JoinColumn(name = "id_pet"))
     private Set<Pet>pets = new HashSet<>();
     @OneToMany(mappedBy = "servRequest",cascade = CascadeType.ALL)
     private List<Payment> payments = new ArrayList<>();
+    @OneToMany(mappedBy = "id.serviceRequest")
+    private Set<ServiceItem> serviceItems = new HashSet<>();
     public ServiceRequest(){
     }
 
-    public ServiceRequest(Long id, LocalDateTime dateHour, String observation, StatusServiceRequest status,Client client, Pet pet, Payment payment) {
+    public ServiceRequest(Long id, LocalDateTime dateHour, String observation, StatusServiceRequest status,Client client, Payment payment) {
         this.id = id;
         DateHour = dateHour;
         this.observation = observation;
         this.status = status;
         this.client = client;
-        addPet(pet);
         setPayments(payment);
     }
 
@@ -93,6 +99,26 @@ public class ServiceRequest implements Serializable {
 
     public void addPet(Pet pet) {
         this.pets.add(pet);
+    }
+
+    public Set<ServiceItem> getServiceItems() {
+        return serviceItems;
+    }
+
+    public void addServiceItem(ServiceItem serviceItem) {
+        this.serviceItems.add(serviceItem);
+    }
+
+    public Set<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void addEmployee(Employee employee) {
+        this.employees.add(employee);
+    }
+
+    public Double getTotalValue() {
+        return totalValue;
     }
 
     public void setPayments(Payment payment) {
