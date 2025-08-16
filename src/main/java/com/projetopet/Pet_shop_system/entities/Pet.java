@@ -23,8 +23,8 @@ public class Pet implements Serializable {
     private LocalDate birthDate;
     private Double weight;
     @ManyToOne
-    @JoinColumn(name = "id_specie")
-    private Specie specie;
+    @JoinColumn(name = "id_breed")
+    private Breed breed;
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_client")
@@ -35,12 +35,12 @@ public class Pet implements Serializable {
     public Pet(){
     }
 
-    public Pet(Long id, String name, LocalDate birthDate, Double weight, Specie specie) {
+    public Pet(Long id, String name, LocalDate birthDate, Double weight, Breed breed) {
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;
         this.weight = weight;
-        this.specie = specie;
+        this.breed = breed;
     }
 
     public Long getId() {
@@ -75,12 +75,12 @@ public class Pet implements Serializable {
         this.weight = weight;
     }
 
-    public Specie getSpecie() {
-        return specie;
+    public Breed getBreed() {
+        return this.breed;
     }
 
-    public void setSpecie(Specie specie) {
-        this.specie = specie;
+    public void setBreed(Breed breed) {
+        this.breed = breed;
     }
 
     public Client getClient() {

@@ -17,10 +17,13 @@ public class Breed implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true,length = 50)
     private String name;
-
     @JsonIgnore
+    @OneToMany(mappedBy = "breed")
+    private Set<Pet> pets = new HashSet<>();
+
+
     @ManyToOne
     @JoinColumn(name = "id_specie")
     private Specie specie;
@@ -53,7 +56,16 @@ public class Breed implements Serializable {
     }
 
     public void setSpecie(Specie specie) {
+        specie.addBreed(this);
         this.specie = specie;
+    }
+
+    public Set<Pet> getPets() {
+        return pets;
+    }
+
+    public void addPets(Pet pet) {
+        this.pets.add(pet);
     }
 
     @Override

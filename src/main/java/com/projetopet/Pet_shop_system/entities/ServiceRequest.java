@@ -19,7 +19,6 @@ public class ServiceRequest implements Serializable {
     private Long id;
     private LocalDateTime DateHour;
     private String observation;
-    private Double totalValue;
     @Enumerated(EnumType.STRING)
     private StatusServiceRequest status;
     @ManyToOne
@@ -40,13 +39,12 @@ public class ServiceRequest implements Serializable {
     public ServiceRequest(){
     }
 
-    public ServiceRequest(Long id, LocalDateTime dateHour, String observation, StatusServiceRequest status,Client client, Payment payment) {
+    public ServiceRequest(Long id, LocalDateTime dateHour, String observation, StatusServiceRequest status,Client client) {
         this.id = id;
         DateHour = dateHour;
         this.observation = observation;
         this.status = status;
         this.client = client;
-        setPayments(payment);
     }
 
     public Long getId() {
@@ -117,15 +115,19 @@ public class ServiceRequest implements Serializable {
         this.employees.add(employee);
     }
 
-    public Double getTotalValue() {
-        return totalValue;
+    public Double getTotal() {
+      double sum = 0.0;
+      for (ServiceItem item: serviceItems){
+          sum += item.getPrice();
+      }
+      return sum;
     }
 
-    public void setPayments(Payment payment) {
+    public void setPayment(Payment payment) {
         payments.clear();
         Integer installments = payment.getInstallments();
-        this.totalValue = payment.getPrice();
-        Double value = (double) this.totalValue / installments;
+        Double total = payment.getPrice();
+        Double value = (double) total / installments;
         for( Integer i = 1; i<= installments; i++){
             payment.setPrice(value);
             Payment pay = new Payment(null,value,installments,payment.getType(),payment.getStatus());

@@ -10,9 +10,8 @@ import org.springframework.context.annotation.Profile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+
 
 
 @Configuration
@@ -34,6 +33,8 @@ public class DevConfing implements CommandLineRunner {
     ServRequestRepository servRequestRepository;
     @Autowired
     ServiceItemRepository serviceItemRepository;
+    @Autowired
+    BreedRepository breedRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -44,15 +45,19 @@ public class DevConfing implements CommandLineRunner {
         Breed breed3 = new Breed(null, "Siamese");
 
 
-        Specie specie1 = new Specie(null, "Dog", breed1);
-        Specie specie2 = new Specie(null, "Dog", breed2);
-        Specie specie3 = new Specie(null, "Cat", breed3);
-        specieRepository.saveAll(Arrays.asList(specie1, specie2, specie3));
+        Specie dog = new Specie(null, "Dog");
+        Specie cat = new Specie(null, "Cat");
+        specieRepository.saveAll(Arrays.asList(dog, cat));
+        breed1.setSpecie(dog);
+        breed2.setSpecie(dog);
+        breed3.setSpecie(cat);
+        breedRepository.saveAll(Arrays.asList(breed1,breed2,breed3));
 
 
-        Pet pet1 = new Pet(null,"Rex", LocalDate.parse("2024-06-12"), 12.0, specie1);
-        Pet pet2 = new Pet(null, "Bob", LocalDate.parse("2020-02-10"),13.0, specie2);
-        Pet pet3 = new Pet(null, "Hulk", LocalDate.parse("2021-08-30"),11.0,specie3);
+
+        Pet pet1 = new Pet(null,"Rex", LocalDate.parse("2024-06-12"), 12.0, breed1);
+        Pet pet2 = new Pet(null, "Bob", LocalDate.parse("2020-02-10"),13.0, breed2);
+        Pet pet3 = new Pet(null, "Hulk", LocalDate.parse("2021-08-30"),11.0,breed3);
 
 
         Address address1 = new Address(null,"890680-61","Erich belz","Itoupava Central",1555, "blumenau", "Brasil", "Tabacaria");
@@ -102,14 +107,20 @@ public class DevConfing implements CommandLineRunner {
         employee3.setService(service1);
         employeeRepository.saveAll(Arrays.asList(employee1,employee2,employee3));
 
-        Payment payment1 = new Payment(null,200.0, 10, PaymentType.CREDIT_CARD, PaymentStatus.PENDING);
 
-        ServiceRequest servRequest1 = new ServiceRequest(null, LocalDateTime.now(),"Primeiro atendimento", StatusServiceRequest.SCHEDULED,client1,payment1);
+        ServiceRequest servRequest1 = new ServiceRequest(null, LocalDateTime.now(),"Primeiro atendimento", StatusServiceRequest.SCHEDULED,client1);
         servRequest1.addPet(client1.getOnePet("rex"));
         servRequest1.addEmployee(employee3);
+        servRequest1.addEmployee(employee1);
+        servRequestRepository.save(servRequest1);
+        ServiceItem serviceItem1 = new ServiceItem(employee3.getService(),servRequest1,employee3.getService().getPrice());
+        ServiceItem serviceItem2 = new ServiceItem(employee1.getService(),servRequest1,employee1.getService().getPrice());
+        servRequest1.addServiceItem(serviceItem1);
+        servRequest1.addServiceItem(serviceItem2);
+        serviceItemRepository.saveAll(Arrays.asList(serviceItem1,serviceItem2));
+        Payment payment1 = new Payment(null,servRequest1.getTotal(), 10, PaymentType.CREDIT_CARD, PaymentStatus.PENDING);
+        servRequest1.setPayment(payment1);
         servRequestRepository.save(servRequest1);
 
-        ServiceItem serviceItem1 = new ServiceItem(service1,servRequest1,servRequest1.getTotalValue());
-        serviceItemRepository.save(serviceItem1);
     }
 }

@@ -17,21 +17,19 @@ public class Specie implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, unique = true, length = 50)
     private String name;
-    @OneToMany(mappedBy = "specie", cascade = CascadeType.PERSIST)
-    private Set<Breed> breeds = new HashSet<>();
     @JsonIgnore
     @OneToMany(mappedBy = "specie")
-    private Set<Pet> pets = new HashSet<>();
+    private Set<Breed> breeds = new HashSet<>();
+
 
     public Specie(){
     }
 
-    public Specie(Long id, String name, Breed breed) {
+    public Specie(Long id, String name) {
         this.id = id;
         this.name = name;
-        addBreed(breed);
     }
 
     public Long getId() {
@@ -55,17 +53,11 @@ public class Specie implements Serializable {
     }
     public void addBreed(Breed breed){
         breeds.add(breed);
-        breed.setSpecie(this);
     }
     public void removeBreed(Breed breed){
         breeds.remove(breed);
-        breed.setSpecie(null);
     }
 
-    @JsonIgnore
-    public Set<Pet> getPets() {
-        return pets;
-    }
 
     @Override
     public boolean equals(Object o) {

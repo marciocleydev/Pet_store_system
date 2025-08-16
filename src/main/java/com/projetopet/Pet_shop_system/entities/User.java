@@ -15,7 +15,9 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false,unique = true,length = 50)
     private String login;
+    @Column(nullable = false,unique = true,length = 50)
     private String passWord;
     @JsonIgnore
     @OneToOne(mappedBy = "user")

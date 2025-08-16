@@ -19,9 +19,12 @@ public class Employee implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false,length = 50)
     private String name;
+    @Column(nullable = false,unique = true,length = 15)
     private String cpf;
     private LocalDate birthDate;
+    @Column(nullable = false,unique = true,length = 50)
     private String email;
     private String phone;
     @OneToOne
