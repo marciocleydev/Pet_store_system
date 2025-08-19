@@ -1,7 +1,9 @@
 package com.projetopet.Pet_shop_system.resources;
 
 import com.projetopet.Pet_shop_system.dto.PetDTO;
+import com.projetopet.Pet_shop_system.dto.ServiceRequestDTO;
 import com.projetopet.Pet_shop_system.services.PetService;
+import com.projetopet.Pet_shop_system.services.ServiceRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,29 +13,29 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/pets")
-public class PetResource {
+@RequestMapping(value = "/requests")
+public class ServiceRequestResource {
     @Autowired
-    private PetService service;
+    private ServiceRequestService service;
 
     @GetMapping
-    public ResponseEntity<List<PetDTO>> findAll(){
-        List<PetDTO> dto = service.findAll();
+    public ResponseEntity<List<ServiceRequestDTO>> findAll(){
+        List<ServiceRequestDTO> dto = service.findAll();
         return ResponseEntity.ok().body(dto);
     }
     @GetMapping(value = "/{id}")
-    public ResponseEntity<PetDTO> findById( @PathVariable Long id){
-        PetDTO dto = service.findById(id);
+    public ResponseEntity<ServiceRequestDTO> findById( @PathVariable Long id){
+        ServiceRequestDTO dto = service.findById(id);
         return ResponseEntity.ok().body(dto);
     }
     @PutMapping(value = "/{id}")
-    public ResponseEntity<PetDTO>update(@RequestBody PetDTO dto,@PathVariable Long id){
-        PetDTO dtoUpdated = service.update(dto, id);
+    public ResponseEntity<ServiceRequestDTO>update(@RequestBody ServiceRequestDTO dto,@PathVariable Long id){
+        ServiceRequestDTO dtoUpdated = service.update(dto, id);
         return ResponseEntity.ok().body(dtoUpdated);
     }
     @PostMapping
-    public ResponseEntity<PetDTO> insert(@RequestBody PetDTO newPet){
-        PetDTO dto = service.insert(newPet);
+    public ResponseEntity<ServiceRequestDTO> insert(@RequestBody ServiceRequestDTO newrequest){
+        ServiceRequestDTO dto = service.insert(newrequest);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
         return ResponseEntity.created(uri).body(dto);
     }

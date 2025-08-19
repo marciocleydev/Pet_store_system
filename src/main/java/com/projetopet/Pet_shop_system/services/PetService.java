@@ -2,12 +2,17 @@ package com.projetopet.Pet_shop_system.services;
 
 import com.projetopet.Pet_shop_system.entities.Breed;
 import com.projetopet.Pet_shop_system.entities.Client;
-import com.projetopet.Pet_shop_system.entities.dto.PetDTO;
+import com.projetopet.Pet_shop_system.dto.PetDTO;
+import com.projetopet.Pet_shop_system.exceptions.IntegrityViolationException;
+import com.projetopet.Pet_shop_system.exceptions.NotFoundException;
+import com.projetopet.Pet_shop_system.mappers.PetMapper;
 import com.projetopet.Pet_shop_system.repositories.BreedRepository;
 import com.projetopet.Pet_shop_system.repositories.ClientRepository;
 import com.projetopet.Pet_shop_system.repositories.PetRepository;
 import com.projetopet.Pet_shop_system.entities.Pet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,62 +27,48 @@ public class PetService {
     private BreedRepository breedRepository;
     @Autowired
     private ClientRepository clientRepository;
+    @Autowired
+    PetMapper mapper;
 
-    public List<PetDTO> findAll(){
-      return repository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
-    }
-    public PetDTO findById(Long id){
-        Optional<Pet> pet = repository.findById(id);
-        return toDTO(pet.get());
+    public List<PetDTO> findAll() {
+            return repository.findAll().stream().map(mapper::toDTO).collect(Collectors.toList());
     }
 
-    public PetDTO insert(PetDTO dto){
-        Pet pet =  repository.save(fromDTO(dto));
-        return toDTO(pet);
+    public PetDTO findById(Long id) {
+        Pet pet = repository.findById(id).orElseThrow(() -> new NotFoundException("Pet not found with id: " + id));
+        return mapper.toDTO(pet);
     }
 
-    public PetDTO update(PetDTO newPet, Long id){
-        Pet pet = repository.findById(id).get();
-         updateData(pet, newPet);
-         return toDTO(repository.save(pet));
-    }
-
-    private void updateData(Pet oldPet, PetDTO newPet){
-        oldPet.setName(newPet.getName());
-        oldPet.setBirthDate(newPet.getBirthDate());
-        oldPet.setWeight(newPet.getWeight());
-
-        if (newPet.getBreedId() != null){
-            Breed breed = breedRepository.findById(newPet.getBreedId()).orElseThrow(()-> new RuntimeException("Breed doesn't existe!"));
-            oldPet.setBreed(breed);
+    public PetDTO insert(PetDTO dto) {
+        if (dto.getId() != null){
+            throw new IntegrityViolationException("Id must be null when inserting a new Pet");
         }
-        if (newPet.getClientId() != null){
-            Client client = clientRepository.findById(newPet.getClientId()).orElseThrow(()-> new RuntimeException("Breed doesn't existe!"));
-            oldPet.setClient(client);
-        }
-    }
-    public void deleteById(Long id){
-        repository.deleteById(id);
+        Pet pet = repository.save(mapper.fromDTO(dto));
+        return mapper.toDTO(pet);
     }
 
-    public Pet fromDTO(PetDTO dto){
-        Pet pet = new Pet();
-        pet.setId(dto.getId());
-        pet.setName(dto.getName());
-        pet.setBirthDate(dto.getBirthDate());
-        pet.setWeight(dto.getWeight());
+    public PetDTO update(PetDTO newPet, Long id) {
+        Pet existingPet = repository.findById(id).orElseThrow(() -> new NotFoundException("Pet not found with id: " + id));
+        Pet petFromDTO = mapper.fromDTO(newPet);
 
-        if (dto.getBreedId() != null){
-            Breed breed = breedRepository.findById(dto.getBreedId()).orElseThrow(()-> new RuntimeException("Breed doesn't exite!"));
-            pet.setBreed(breed);
-        }
-        if (dto.getClientId() != null){
-            Client client = clientRepository.findById(dto.getClientId()).orElseThrow(() -> new RuntimeException("Client doesn't exite!"));
-            pet.setClient(client);
-        }
-        return pet;
+        existingPet.setClient(petFromDTO.getClient());
+        existingPet.setBreed(petFromDTO.getBreed());
+        existingPet.setWeight(petFromDTO.getWeight());
+        existingPet.setName(petFromDTO.getName());
+        existingPet.setBirthDate(petFromDTO.getBirthDate());
+        return mapper.toDTO(repository.save(existingPet));
     }
-    public PetDTO toDTO(Pet pet){
-        return new PetDTO(pet);
+
+    public void deleteById(Long id) {
+        try {
+            if(!repository.existsById(id)){
+                throw new NotFoundException("Pet not found with id: " + id);
+            }
+            repository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new IntegrityViolationException(e.getMessage());
+        }
+
     }
+
 }

@@ -2,6 +2,7 @@ package com.projetopet.Pet_shop_system.config;
 
 import com.projetopet.Pet_shop_system.entities.*;
 import com.projetopet.Pet_shop_system.entities.enums.*;
+import com.projetopet.Pet_shop_system.entities.enums.StatusServRequest;
 import com.projetopet.Pet_shop_system.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -37,7 +38,7 @@ public class DevConfing implements CommandLineRunner {
     BreedRepository breedRepository;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(java.lang.String... args) throws Exception {
         //dog
         Breed breed1 = new Breed(null, "labrador");
         Breed breed2 = new Breed(null, "puddle");
@@ -108,7 +109,7 @@ public class DevConfing implements CommandLineRunner {
         employeeRepository.saveAll(Arrays.asList(employee1,employee2,employee3));
 
 
-        ServiceRequest servRequest1 = new ServiceRequest(null, LocalDateTime.now(),"Primeiro atendimento", StatusServiceRequest.SCHEDULED,client1);
+        ServiceRequest servRequest1 = new ServiceRequest(null, LocalDateTime.now(),"Primeiro atendimento", StatusServRequest.SCHEDULED,client1);
         servRequest1.addPet(client1.getOnePet("rex"));
         servRequest1.addEmployee(employee3);
         servRequest1.addEmployee(employee1);

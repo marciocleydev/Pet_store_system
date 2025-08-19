@@ -1,8 +1,6 @@
-package com.projetopet.Pet_shop_system.entities.enums;
+package com.projetopet.Pet_shop_system.entities;
 
 import com.projetopet.Pet_shop_system.entities.PK.ServiceItemPK;
-import com.projetopet.Pet_shop_system.entities.Service;
-import com.projetopet.Pet_shop_system.entities.ServiceRequest;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

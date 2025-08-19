@@ -1,4 +1,4 @@
-package com.projetopet.Pet_shop_system.entities.dto;
+package com.projetopet.Pet_shop_system.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.projetopet.Pet_shop_system.entities.Breed;

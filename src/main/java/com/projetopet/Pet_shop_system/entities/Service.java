@@ -1,7 +1,6 @@
 package com.projetopet.Pet_shop_system.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.projetopet.Pet_shop_system.entities.enums.ServiceItem;
 import com.projetopet.Pet_shop_system.entities.enums.ServiceType;
 import jakarta.persistence.*;
 

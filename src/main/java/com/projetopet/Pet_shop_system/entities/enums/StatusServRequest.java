@@ -1,6 +1,6 @@
 package com.projetopet.Pet_shop_system.entities.enums;
 
-public enum StatusServiceRequest {
+public enum StatusServRequest {
     SCHEDULED,
     CONFIRMED,
     CANCELED,

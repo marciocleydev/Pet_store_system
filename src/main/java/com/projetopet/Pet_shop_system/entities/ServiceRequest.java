@@ -1,7 +1,6 @@
 package com.projetopet.Pet_shop_system.entities;
 
-import com.projetopet.Pet_shop_system.entities.enums.ServiceItem;
-import com.projetopet.Pet_shop_system.entities.enums.StatusServiceRequest;
+import com.projetopet.Pet_shop_system.entities.enums.StatusServRequest;
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -18,9 +17,9 @@ public class ServiceRequest implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDateTime DateHour;
-    private String observation;
+    private java.lang.String observation;
     @Enumerated(EnumType.STRING)
-    private StatusServiceRequest status;
+    private StatusServRequest status;
     @ManyToOne
     @JoinColumn(name = "id_client")
     private Client client;
@@ -39,7 +38,7 @@ public class ServiceRequest implements Serializable {
     public ServiceRequest(){
     }
 
-    public ServiceRequest(Long id, LocalDateTime dateHour, String observation, StatusServiceRequest status,Client client) {
+    public ServiceRequest(Long id, LocalDateTime dateHour, java.lang.String observation, StatusServRequest status, Client client) {
         this.id = id;
         DateHour = dateHour;
         this.observation = observation;
@@ -63,19 +62,19 @@ public class ServiceRequest implements Serializable {
         DateHour = dateHour;
     }
 
-    public String getObservation() {
+    public java.lang.String getObservation() {
         return observation;
     }
 
-    public void setObservation(String observation) {
+    public void setObservation(java.lang.String observation) {
         this.observation = observation;
     }
 
-    public StatusServiceRequest getStatus() {
+    public StatusServRequest getStatus() {
         return status;
     }
 
-    public void setStatus(StatusServiceRequest status) {
+    public void setStatus(StatusServRequest status) {
         this.status = status;
     }
 
