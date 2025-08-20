@@ -14,6 +14,7 @@ public class ServiceRequestDTO implements Serializable {
     private LocalDateTime DateHour;
     private String observation;
     private String status;
+    private Double totalValue;
     private Long ClientId;
     private String ClientName;
     public ServiceRequestDTO(){
@@ -22,6 +23,7 @@ public class ServiceRequestDTO implements Serializable {
         this.id = request.getId();
         this.DateHour = request.getDateHour();
         this.observation = request.getObservation();
+        this.totalValue = request.getTotal();
         this.status = request.getStatus().toString();
         this.ClientId = request.getClient().getId();
         this.ClientName = request.getClient().getName();
@@ -57,6 +59,14 @@ public class ServiceRequestDTO implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Double getTotalValue() {
+        return totalValue;
+    }
+
+    public void setTotalValue(Double totalValue) {
+        this.totalValue = totalValue;
     }
 
     public Long getClientId() {

@@ -102,9 +102,18 @@ public class Client implements Serializable {
         this.user = user;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Address getAddress() {
         return address;
     }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
 
     public Set<Pet> getPets() {
         return pets;

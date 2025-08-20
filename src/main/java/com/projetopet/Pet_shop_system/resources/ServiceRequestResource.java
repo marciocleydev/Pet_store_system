@@ -2,6 +2,7 @@ package com.projetopet.Pet_shop_system.resources;
 
 import com.projetopet.Pet_shop_system.dto.PetDTO;
 import com.projetopet.Pet_shop_system.dto.ServiceRequestDTO;
+import com.projetopet.Pet_shop_system.dto.ServiceRequestFullDTO;
 import com.projetopet.Pet_shop_system.services.PetService;
 import com.projetopet.Pet_shop_system.services.ServiceRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,8 @@ public class ServiceRequestResource {
         return ResponseEntity.ok().body(dto);
     }
     @GetMapping(value = "/{id}")
-    public ResponseEntity<ServiceRequestDTO> findById( @PathVariable Long id){
-        ServiceRequestDTO dto = service.findById(id);
+    public ResponseEntity<ServiceRequestFullDTO> findById(@PathVariable Long id){
+        ServiceRequestFullDTO dto = service.findFullById(id);
         return ResponseEntity.ok().body(dto);
     }
     @PutMapping(value = "/{id}")

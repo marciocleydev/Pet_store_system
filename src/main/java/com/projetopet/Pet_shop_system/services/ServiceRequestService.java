@@ -1,16 +1,11 @@
 package com.projetopet.Pet_shop_system.services;
 
-import com.projetopet.Pet_shop_system.dto.PetDTO;
 import com.projetopet.Pet_shop_system.dto.ServiceRequestDTO;
-import com.projetopet.Pet_shop_system.entities.Pet;
+import com.projetopet.Pet_shop_system.dto.ServiceRequestFullDTO;
 import com.projetopet.Pet_shop_system.entities.ServiceRequest;
 import com.projetopet.Pet_shop_system.exceptions.IntegrityViolationException;
 import com.projetopet.Pet_shop_system.exceptions.NotFoundException;
-import com.projetopet.Pet_shop_system.mappers.PetMapper;
 import com.projetopet.Pet_shop_system.mappers.ServiceRequestMapper;
-import com.projetopet.Pet_shop_system.repositories.BreedRepository;
-import com.projetopet.Pet_shop_system.repositories.ClientRepository;
-import com.projetopet.Pet_shop_system.repositories.PetRepository;
 import com.projetopet.Pet_shop_system.repositories.ServRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -28,6 +23,10 @@ public class ServiceRequestService {
 
     public List<ServiceRequestDTO> findAll() {
             return repository.findAll().stream().map(mapper::toDTO).collect(Collectors.toList());
+    }
+    public ServiceRequestFullDTO findFullById(Long id){
+        ServiceRequest request = repository.findById(id).orElseThrow(()-> new NotFoundException("ServiceRequest not found with id: " + id));
+        return mapper.toFullDTO(request);
     }
 
     public ServiceRequestDTO findById(Long id) {

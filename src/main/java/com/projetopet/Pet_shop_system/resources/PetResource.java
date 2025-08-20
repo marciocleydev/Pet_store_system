@@ -1,6 +1,9 @@
 package com.projetopet.Pet_shop_system.resources;
 
 import com.projetopet.Pet_shop_system.dto.PetDTO;
+import com.projetopet.Pet_shop_system.dto.ServiceRequestDTO;
+import com.projetopet.Pet_shop_system.dto.ServiceRequestFullDTO;
+import com.projetopet.Pet_shop_system.entities.ServiceRequest;
 import com.projetopet.Pet_shop_system.services.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +28,11 @@ public class PetResource {
     public ResponseEntity<PetDTO> findById( @PathVariable Long id){
         PetDTO dto = service.findById(id);
         return ResponseEntity.ok().body(dto);
+    }
+    @GetMapping(value = "/{id}/requests")
+    public ResponseEntity<List<ServiceRequestDTO>> findRequests(@PathVariable Long id){
+        List<ServiceRequestDTO> requestsDTO = service.findPetRequests(id);
+        return ResponseEntity.ok().body(requestsDTO);
     }
     @PutMapping(value = "/{id}")
     public ResponseEntity<PetDTO>update(@RequestBody PetDTO dto,@PathVariable Long id){
